@@ -1,87 +1,41 @@
-import React, { Component } from 'react'
-import "bootstrap/dist/css/bootstrap.min.css"
-import axios from 'axios'
+import React,{Component} from 'react';
+import "bootstrap/dist/css/bootstrap.min.css";
+import {BrowserRouter as Router,Route,Link} from 'react-router-dom';
+import CreateTodo from "./components/create-todo.component";
+import EditTodo from "./components/edit-todo.component";
+import TodosList from "./components/todos-list.component";
 
+import logo from "./logo.jpg";
 class App extends Component{
-    constructor(){
-        super();
-        this.state={
-            fullName: '',
-            username: '',
-            email: '',
-            password: ''
-        }
-        this.changeFullName=this.changeFullName.bind(this);
-        this.changeUsername=this.changeUsername.bind(this);
-        this.changeEmail=this.changeEmail.bind(this);
-        this.changePassword=this.changePassword.bind(this);
-        this.onSubmit=this.onSubmit.bind(this);
-    }
 
-    changeFullName(event){
-        this.setState({
-            fullName: event.target.value
-        })
-    }
-    changeUsername(event){
-        this.setState({
-            username: event.target.value
-        })
-    }
-    changeEmail(event){
-        this.setState({
-            email: event.target.value
-        })
-    }
-    changePassword(event){
-        this.setState({
-            password: event.target.value
-        })
-    }
-    onSubmit(event){
-        event.preventDefault();
-        const registered={
-            fullName: this.state.fullName,
-            username: this.state.username,
-            email: this.state.email,
-            password: this.state.password
-        }
-        axios.post('http://localhost:4000/app/signup',registered)
-        .then(response=>console.log(response.data));
-        this.setState({
-            fullName:'',
-            username: '',
-            email: '',
-            password: ''
-        });
-    }
     render(){
-        return(<div>
-            <div className='container'>
-                <div className='form-div'>
-                    <form onSubmit={this.onSubmit}>
-                        <input type="text" placeholder='Full name' 
-                        onChange={this.changeFullName} value={this.state.fullName}
-                        className='form-control form group'></input>
-
-                        <input type='text' placeholder="Username" onChange={this.changeUsername}
-                        value={this.state.username} className='form-control form group'></input>
-
-                        <input type="text" placeholder='E-mail' 
-                        onChange={this.changeEmail} value={this.state.email}
-                        className='form-control form group'></input>
-
-                        <input type="password" placeholder='Password' 
-                        onChange={this.changePassword} value={this.state.password}
-                        className='form-control form group'></input>
-
-                        <input type="submit" className='btn btn-danger btn-block'
-                        value='Submit'></input>
-
-                    </form>
-                </div>
+        return(
+        <Router>
+        <div className="container">
+          <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <a className="navbar-brand" href="https://snakista.github.io" target="_blank">
+              <img src={logo} width="30" height="30" alt="Snakista" />
+            </a>
+            <Link to="/" className="navbar-brand">MERN-Stack Todo App</Link>
+            <div className="collpase navbar-collapse">
+              <ul className="navbar-nav mr-auto">
+                <li className="navbar-item">
+                  <Link to="/" className="nav-link">Todos</Link>
+                </li>
+                <li className="navbar-item">
+                  <Link to="/create" className="nav-link">Create Todo</Link>
+                </li>
+              </ul>
             </div>
-        </div> );
+          </nav>
+          <br/>
+          <Route path="/" exact component={TodosList} />
+          <Route path="/edit/:id" component={EditTodo} />
+          <Route path="/create" component={CreateTodo} />
+        </div>
+        </Router>
+        );
     }
 }
-export default App;
+
+export default App
